@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <script src="../scripts/libs/es6-promise.min.js"></script>
+    <script src="../scripts/libs/VSS.SDK.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../css/libs/fabric.min.css">
+</head>
+
+<body>
+    <script type="text/javascript">
+        // Initialize framework 
+        VSS.init({
+            explicitNotifyLoaded: true,
+            usePlatformScripts: true,
+            usePlatformStyles: false,
+            moduleLoaderConfig: {
+                paths: {
+                    "OfficeFabric": "../node_modules/office-ui-fabric-react/lib-amd",
+                    "@microsoft/load-themed-styles": "../node_modules/office-ui-fabric-react/node_modules/@microsoft/load-themed-styles/lib-amd/index"
+                }
+            }
+        });
+        
+        // Load main entry point for extension
+        VSS.require(["../scripts/PatternControl"], function (PatternControl) {            
+            PatternControl.init();
+            VSS.notifyLoadSucceeded();            
+        });
+    </script>
+
+    <div id="ext-container">
+        
+    </div>
+</body>
+</html>
