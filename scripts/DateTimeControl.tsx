@@ -16,7 +16,7 @@ interface IDateTimeControlInputs {
 export class DateTimeControl extends BaseFieldControl<IBaseFieldControlProps, IBaseFieldControlState> {
 
     public render(): JSX.Element {
-        let className = "rating-control";
+        let className = "datetime-control";
 
         return (
             <Fabric className="fabric-container">
@@ -40,8 +40,8 @@ export class DateTimeControl extends BaseFieldControl<IBaseFieldControlProps, IB
             defaultDate: this.state.value
         });
 
-        $(container).on("dp.change", function (e) {
-            //e.date
+        $(container).on("dp.change", (e: any) => {
+            this.onValueChanged(e.date.toDate());
         });
 
         $(container).on("dp.show", function (e) {
