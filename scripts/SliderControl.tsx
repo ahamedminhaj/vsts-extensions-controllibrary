@@ -12,9 +12,9 @@ import {InputError} from "./InputError";
 
 interface ISliderControlInputs {
     FieldName: string;
-    MinValue: number;
-    MaxValue: number;
-    StepSize: number;
+    MinValue: string;
+    MaxValue: string;
+    StepSize: string;
 }
 
 interface ISliderControlProps extends IBaseFieldControlProps {
@@ -51,8 +51,8 @@ export async function init() {
     ReactDOM.render(
         <SliderControl 
             fieldName={inputs.FieldName} 
-            minValue={inputs.MinValue}
-            maxValue={inputs.MaxValue}
-            stepSize={inputs.StepSize}
+            minValue={parseInt(inputs.MinValue)}
+            maxValue={parseInt(inputs.MaxValue)}
+            stepSize={parseInt(inputs.StepSize)}
         />, $("#ext-container")[0]);
 }

@@ -30,7 +30,8 @@ module.exports = {
         extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
         moduleExtensions: ["-loader"],
         alias: { 
-            "OfficeFabric": path.resolve(__dirname, "node_modules/office-ui-fabric-react/lib-amd")
+            "OfficeFabric": path.resolve(__dirname, "node_modules/office-ui-fabric-react/lib-amd"),
+            "ReactWidgets": path.resolve(__dirname, "node_modules/react-widgets/lib")
         }        
     },
     module: {
@@ -57,14 +58,11 @@ module.exports = {
         new CopyWebpackPlugin([
             { from: "./node_modules/vss-web-extension-sdk/lib/VSS.SDK.min.js", to: "scripts/libs/VSS.SDK.min.js" },
             { from: "./node_modules/es6-promise/dist/es6-promise.min.js", to: "scripts/libs/es6-promise.min.js" },
-            { from: "./node_modules/bootstrap/dist/js/bootstrap.min.js", to: "scripts/libs/bootstrap.min.js" },
-            { from: "./node_modules/jquery/dist/jquery.min.js", to: "scripts/libs/jquery.min.js" },
-            { from: "./node_modules/moment/min/moment.min.js", to: "scripts/libs/moment.min.js" },
-            { from: "./node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js", to: "scripts/libs/bootstrap-datetimepicker.min.js" },
 
-            { from: "./node_modules/bootstrap/dist/css/bootstrap.min.css", to: "css/libs/bootstrap.min.css" },            
             { from: "./node_modules/office-ui-fabric-react/dist/css/fabric.min.css", to: "css/libs/fabric.min.css" },
-            { from: "./node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css", to: "css/libs/bootstrap-datetimepicker.min.css" },
+            { from: "./node_modules/react-widgets/dist/css/react-widgets.css", to: "css/libs/react-widgets.css" },
+
+            { from: "./node_modules/react-widgets/dist/fonts", to: "css/fonts" },
 
             { from: "./img", to: "img" },
             { from: "./html", to: "html" },

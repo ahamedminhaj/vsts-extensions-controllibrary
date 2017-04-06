@@ -6,6 +6,10 @@ import * as ReactDOM from "react-dom";
 import { Fabric } from "OfficeFabric/Fabric";
 import { autobind } from "OfficeFabric/Utilities";
 
+import * as Moment from "moment";
+import * as DateTimePicker from "ReactWidgets/DateTimePicker";
+import * as MomentLocalizer from "ReactWidgets/localizers/moment";
+
 import {BaseFieldControl, IBaseFieldControlProps, IBaseFieldControlState} from "./BaseFieldControl";
 import {InputError} from "./InputError";
 
@@ -16,13 +20,13 @@ interface IDateTimeControlInputs {
 export class DateTimeControl extends BaseFieldControl<IBaseFieldControlProps, IBaseFieldControlState> {
 
     public render(): JSX.Element {
-        let className = "datetime-control";
-
         return (
             <Fabric className="fabric-container">
-                <div>
-                    <div ref={this._renderDatePicker}/>
-                </div>
+                <DateTimePicker 
+                    duration={0}
+                    value={this.state.value} 
+                    onChange={(newDate: Date, dateStr: string) => this.onValueChanged(newDate)} 
+                    onToggle={this._onToggle} />
                     
                 { this.state.error && (<InputError error={this.state.error} />) }
             </Fabric>
@@ -30,13 +34,27 @@ export class DateTimeControl extends BaseFieldControl<IBaseFieldControlProps, IB
     }
 
     @autobind
+    private _onToggle(on: any) {
+        if (on === "calendar") {
+            $("#ext-container").height(470);
+        }
+        else if (on === "time") {
+            $("#ext-container").height(270);
+        }
+        else {
+            $("#ext-container").css("height", "auto");
+        }
+
+        this.resize();
+    }
+
+    /*@autobind
     private _renderDatePicker(container: HTMLElement) {
+        <DateTimePicker 
         $(container).datetimepicker({
             format: "dddd, MMMM Do YYYY, h:mm:ss a",
             useCurrent: false,
-            sideBySide: true,
             showTodayButton: true,
-            inline: true,
             defaultDate: this.state.value
         });
 
@@ -51,10 +69,11 @@ export class DateTimeControl extends BaseFieldControl<IBaseFieldControlProps, IB
         $(container).on("dp.hide", function (e) {
             
         });
-    }
+    }*/
 }
 
 export async function init() {
+    MomentLocalizer(Moment);
     let inputs = BaseFieldControl.getInputs<IDateTimeControlInputs>();
 
     ReactDOM.render(

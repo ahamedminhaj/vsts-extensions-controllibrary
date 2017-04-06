@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 
 import * as VSSService from "VSS/Service";
 import * as WitService from "TFS/WorkItemTracking/Services";
-import * as VSSUtilsCore from "VSS/Utils/Core";
+import * as Utils_Core from "VSS/Utils/Core";
 import * as WitExtensionContracts  from "TFS/WorkItemTracking/ExtensionContracts";
 import { WorkItemFormService, IWorkItemFormService } from "TFS/WorkItemTracking/Services";
 
@@ -44,7 +44,7 @@ export class BaseFieldControl<TP extends IBaseFieldControlProps, TS extends IBas
             },
         } as WitExtensionContracts.IWorkItemNotificationListener);    
 
-        this._windowResizeThrottleDelegate = VSSUtilsCore.throttledDelegate(this, 50, () => {
+        this._windowResizeThrottleDelegate = Utils_Core.throttledDelegate(this, 50, () => {
             this._windowWidth = window.innerWidth;
             this.resize();
         });
@@ -97,11 +97,19 @@ export class BaseFieldControl<TP extends IBaseFieldControlProps, TS extends IBas
         return "";
     }
 
-    protected resize() {
-        this._bodyElement = document.getElementsByTagName("body").item(0) as HTMLBodyElement;
+    protected resize(delay?: number) {
+        const f = () => {
+            this._bodyElement = document.getElementsByTagName("body").item(0) as HTMLBodyElement;            
+            (VSS as any).resize(null, this._bodyElement.offsetHeight);  
+        }
+        const throttle = Utils_Core.throttledDelegate(this, delay, f);
 
-        // Cast as any until declarations are updated
-        (VSS as any).resize(null, this._bodyElement.offsetHeight);  
+        if (delay) {
+            throttle();
+        }
+        else {
+            f();
+        }
     }
 
     /**

@@ -1,9 +1,11 @@
 @import "base";
 
 #ext-container {
+    padding: 5px 5px 0 5px;
+
     .pattern-control {
         margin:0;
-        
+
         .pattern-control-text {
             &.invalid-value {
                 border-color: #a80000;

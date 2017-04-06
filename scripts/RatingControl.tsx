@@ -13,8 +13,8 @@ import {InputError} from "./InputError";
 
 interface IRatingControlInputs {
     FieldName: string;
-    MinValue: number;
-    MaxValue: number;
+    MinValue: string;
+    MaxValue: string;
 }
 
 interface IRatingControlProps extends IBaseFieldControlProps {
@@ -49,7 +49,7 @@ export async function init() {
     ReactDOM.render(
         <RatingControl 
             fieldName={inputs.FieldName} 
-            minValue={inputs.MinValue}
-            maxValue={inputs.MaxValue}
+            minValue={parseInt(inputs.MinValue)}
+            maxValue={parseInt(inputs.MaxValue)}
         />, $("#ext-container")[0]);
 }
