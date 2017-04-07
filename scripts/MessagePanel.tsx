@@ -15,7 +15,7 @@ interface IMessagePanelProps {
     messageType: MessageType;
 }
 
-enum MessageType {
+export enum MessageType {
     Error,
     Warning,
     Info,
@@ -57,7 +57,7 @@ export var MessagePanelComponent: React.StatelessComponent<IMessagePanelProps> =
 export class MessagePanel extends AutoResizableComponent<IMessagePanelProps, void> {
 
     public render(): JSX.Element {
-        return <MessagePanelComponent message={this.props.message} messageType={this.props.messageType} />
+        return <MessagePanelComponent message={this.props.message} messageType={this.props.messageType} />;
     }
 }
 

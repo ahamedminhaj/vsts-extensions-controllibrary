@@ -1,1 +1,43 @@
 @import "base";
+
+#ext-container {
+    .container {
+         display: flex;
+        flex-direction: column;
+
+        .checklist-items {
+            flex: 1;
+            max-height: 400px;
+            overflow: auto;
+            margin-left: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+
+            .checklist-item {
+                display: flex;
+
+                .checkbox {
+                    flex: 1;
+                    margin-right: 10px;
+                }
+            }
+        }
+
+        .add-checklist-items {
+            display: flex;
+            margin-left: 10px;
+
+            .add-icon {
+                margin-right: 10px;
+                padding-top: 5px;
+                color: green;
+                font-weight: bold;
+            }
+
+            input {
+                flex: 1;
+                max-width: 200px;
+            }
+        }
+    }
+}
