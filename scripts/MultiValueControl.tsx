@@ -3,14 +3,7 @@ import "../css/MultiValueControl.scss";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { Fabric } from "OfficeFabric/Fabric";
-import { TagPicker, ITag } from 'OfficeFabric/components/pickers/TagPicker/TagPicker';
-import { autobind } from "OfficeFabric/Utilities";
-
-import Utils_String = require("VSS/Utils/String");
-import Utils_Array = require("VSS/Utils/Array");
-import { WorkItemFormService, IWorkItemFormService } from "TFS/WorkItemTracking/Services";
-import * as WitService from "TFS/WorkItemTracking/Services";
+import * as Multiselect from "ReactWidgets/Multiselect";
 
 import {BaseFieldControl, IBaseFieldControlProps, IBaseFieldControlState} from "./BaseFieldControl";
 import {InputError} from "./InputError";
@@ -26,52 +19,44 @@ interface IMultiValueControlProps extends IBaseFieldControlProps {
 
 export class MultiValueControl extends BaseFieldControl<IMultiValueControlProps, IBaseFieldControlState> {
     public render(): JSX.Element {
-        let tagPickerClassName = "multi-value-picker";
+        let className = "multivalue-control-container";
         if (this.state.error) {
-            tagPickerClassName += " invalid-value";
+            className += " invalid-value";
         }
-          
-        let defaultValues = this._parseFieldValue();
+
         return (
-            <Fabric className="fabric-container">
-                <TagPicker className={tagPickerClassName}
-                    defaultSelectedItems={defaultValues}
-                    onResolveSuggestions={this._onFilterChange}
-                    getTextFromItem={item => item.name}
-                    onChange={items => this.onValueChanged(items.map(item => item.key).join(";"))}
-                    pickerSuggestionsProps={
-                        {
-                            suggestionsHeaderText: 'Suggested values',
-                            noResultsFoundText: 'No values Found'
-                        }
-                    }
-                />
+            <div className={className}>
+                <Multiselect 
+                    duration={0}
+                    data={this.props.suggestedValues}
+                    value={this._parseFieldValue()}
+                    onChange={(newValues: string[]) => this.onValueChanged((newValues || []).join(";"))}
+                    onToggle={(on: boolean) => this._onToggle(on)} />
+                    
                 { this.state.error && (<InputError error={this.state.error} />) }
-            </Fabric>
+            </div>
         )        
     }
 
-    @autobind
-    private _onFilterChange(filterText: string, tagList: ITag[]): ITag[] {
-        return filterText
-            ? this.props.suggestedValues.filter(value => value.toLowerCase().indexOf(filterText.toLowerCase()) === 0 
-                && Utils_Array.findIndex(tagList, (tag: ITag) => Utils_String.equals(tag.key, value, true)) === -1).map(value => {
-                    return { key: value, name: value};
-                }) 
-            : [];
-    }
-
-    @autobind
-    private _parseFieldValue(): ITag[] {
+    private _parseFieldValue(): string[] {
         let value = this.state.value as string;
         if (value) {
-            return value.split(";").map(v => {
-                return { key: v.trim(), name: v.trim()};
-            });
+            return value.split(";").map(v => v.trim());
         }
         else {
             return [];
         }
+    }
+
+    private _onToggle(on: boolean) {
+        if (on) {
+            $("#ext-container").height(260);
+        }
+        else {
+            $("#ext-container").css("height", "auto");
+        }
+
+        this.resize();
     }
 }
 

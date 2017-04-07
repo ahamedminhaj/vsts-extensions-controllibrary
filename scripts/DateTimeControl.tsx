@@ -3,9 +3,6 @@ import "../css/DateTimeControl.scss";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { Fabric } from "OfficeFabric/Fabric";
-import { autobind } from "OfficeFabric/Utilities";
-
 import * as Moment from "moment";
 import * as DateTimePicker from "ReactWidgets/DateTimePicker";
 import * as MomentLocalizer from "ReactWidgets/localizers/moment";
@@ -20,20 +17,24 @@ interface IDateTimeControlInputs {
 export class DateTimeControl extends BaseFieldControl<IBaseFieldControlProps, IBaseFieldControlState> {
 
     public render(): JSX.Element {
+        let className = "datetime-control-container";
+        if (this.state.error) {
+            className += " invalid-value";
+        }
+
         return (
-            <Fabric className="fabric-container">
+            <div className={className}>
                 <DateTimePicker 
                     duration={0}
                     value={this.state.value} 
                     onChange={(newDate: Date, dateStr: string) => this.onValueChanged(newDate)} 
-                    onToggle={this._onToggle} />
+                    onToggle={(on: any) => this._onToggle(on)} />
                     
                 { this.state.error && (<InputError error={this.state.error} />) }
-            </Fabric>
+            </div>
         )        
     }
 
-    @autobind
     private _onToggle(on: any) {
         if (on === "calendar") {
             $("#ext-container").height(470);
@@ -47,29 +48,6 @@ export class DateTimeControl extends BaseFieldControl<IBaseFieldControlProps, IB
 
         this.resize();
     }
-
-    /*@autobind
-    private _renderDatePicker(container: HTMLElement) {
-        <DateTimePicker 
-        $(container).datetimepicker({
-            format: "dddd, MMMM Do YYYY, h:mm:ss a",
-            useCurrent: false,
-            showTodayButton: true,
-            defaultDate: this.state.value
-        });
-
-        $(container).on("dp.change", (e: any) => {
-            this.onValueChanged(e.date.toDate());
-        });
-
-        $(container).on("dp.show", function (e) {
-            
-        });
-
-        $(container).on("dp.hide", function (e) {
-            
-        });
-    }*/
 }
 
 export async function init() {

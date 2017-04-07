@@ -9,7 +9,7 @@
     "clean": "rimraf dist *.vsix",
     "cleanall": "npm run clean && rimraf typings node_modules",
     "dev": "webpack-dev-server -d --hot --progress --colors --content-base ./ --port 8888",
-    "devs": "webpack-dev-server -d --hot --progress --colors --https --content-base ./ --port 8888",
+    "devssl": "webpack-dev-server -d --hot --progress --colors --https --content-base ./ --port 8888",
     "build:release": "npm run clean && mkdir dist && webpack --display-error-details --progress --colors --output-path ./dist -p",
     "package:dev": "node ./configs/packageDev",
     "package:devssl": "node ./configs/packageDevSSL",

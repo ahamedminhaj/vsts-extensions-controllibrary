@@ -1,8 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import * as VSSService from "VSS/Service";
-import * as WitService from "TFS/WorkItemTracking/Services";
 import * as Utils_Core from "VSS/Utils/Core";
 import * as WitExtensionContracts  from "TFS/WorkItemTracking/ExtensionContracts";
 import { WorkItemFormService, IWorkItemFormService } from "TFS/WorkItemTracking/Services";
@@ -82,7 +80,7 @@ export class BaseFieldControl<TP extends IBaseFieldControlProps, TS extends IBas
         this._setValue(newValue);
 
         this._flushing = true;
-        let workItemFormService = await WitService.WorkItemFormService.getService();
+        let workItemFormService = await WorkItemFormService.getService();
         try {
             await workItemFormService.setFieldValue(this.props.fieldName, newValue);
             this._flushing = false;
@@ -125,7 +123,7 @@ export class BaseFieldControl<TP extends IBaseFieldControlProps, TS extends IBas
     }    
 
     private async _getCurrentFieldValue(): Promise<Object> {
-        let workItemFormService = await WitService.WorkItemFormService.getService();
+        let workItemFormService = await WorkItemFormService.getService();
         try {
             return await workItemFormService.getFieldValue(this.props.fieldName);
         }

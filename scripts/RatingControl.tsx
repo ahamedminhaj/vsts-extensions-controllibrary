@@ -6,7 +6,6 @@ import * as ReactDOM from "react-dom";
 import { Fabric } from "OfficeFabric/Fabric";
 import { Rating } from 'OfficeFabric/components/Rating';
 import { RatingSize } from 'OfficeFabric/components/Rating/Rating.Props';
-import { autobind } from "OfficeFabric/Utilities";
 
 import {BaseFieldControl, IBaseFieldControlProps, IBaseFieldControlState} from "./BaseFieldControl";
 import {InputError} from "./InputError";

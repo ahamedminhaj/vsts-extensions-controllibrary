@@ -5,7 +5,6 @@ import * as ReactDOM from "react-dom";
 
 import { Fabric } from "OfficeFabric/Fabric";
 import { Slider } from 'OfficeFabric/components/Slider';
-import { autobind } from "OfficeFabric/Utilities";
 
 import {BaseFieldControl, IBaseFieldControlProps, IBaseFieldControlState} from "./BaseFieldControl";
 import {InputError} from "./InputError";

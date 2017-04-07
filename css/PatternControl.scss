@@ -1,14 +1,20 @@
 @import "base";
 
 #ext-container {
-    padding: 5px 5px 0 5px;
-
     .pattern-control {
         margin:0;
 
-        .pattern-control-text {
+        .pattern-control-input {
+            height: 24px;
+            border: none;
+            padding: 1px 2px;
+
+            &:hover, &:focus {
+                border: 1px solid #dadada;
+            }
+
             &.invalid-value {
-                border-color: #a80000;
+                border: 1px solid #a80000;
             }
         }
     }

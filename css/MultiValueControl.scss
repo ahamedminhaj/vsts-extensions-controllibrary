@@ -1,1 +1,13 @@
 @import "base";
+
+#ext-container {
+    padding: 2px 15px 2px 1px !important;
+
+    .multivalue-control-container {
+        &.invalid-value {
+            .rw-multiselect {
+                border: 1px solid #a80000;
+            }
+        }
+    }
+}

@@ -5,7 +5,6 @@ import * as ReactDOM from "react-dom";
 
 import { Fabric } from "OfficeFabric/Fabric";
 import { TextField } from 'OfficeFabric/components/TextField';
-import { autobind } from "OfficeFabric/Utilities";
 
 import {BaseFieldControl, IBaseFieldControlProps, IBaseFieldControlState} from "./BaseFieldControl";
 import {InputError} from "./InputError";
@@ -22,7 +21,7 @@ interface IPatternControlProps extends IBaseFieldControlProps {
 export class PatternControl extends BaseFieldControl<IPatternControlProps, IBaseFieldControlState> {
 
     public render(): JSX.Element {
-        let className = "pattern-control-text";
+        let className = "pattern-control-input";
         if (this.state.error) {
             className += " invalid-value";
         }
