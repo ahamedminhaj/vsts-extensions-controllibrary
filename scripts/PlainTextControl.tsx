@@ -3,6 +3,8 @@ import "../css/PlainTextControl.scss";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
+import {Label} from "OfficeFabric/Label";
+
 import {AutoResizableComponent} from "./AutoResizableComponent";
 
 interface IPlainTextControlInputs {
@@ -17,9 +19,7 @@ export class PlainTextControl extends AutoResizableComponent<IPlainTextControlPr
 
     public render(): JSX.Element {
         return (
-            <div className={"plaintext-control"}>
-                <span className="message-text">{this.props.text}</span>
-            </div>
+            <Label className={"plaintext-control"}>{this.props.text}</Label>
         );
     }
 }

@@ -31,7 +31,8 @@ interface IChecklistState {
     isLoaded: boolean;
     isNewWorkItem: boolean;
     itemText: string;
-    error: string;
+    inputError: string;
+    saveError: boolean;
     isPersonalView: boolean;
 }
 
@@ -53,16 +54,18 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
 
         VSS.register(VSS.getContribution().id, {
             onLoaded: (args: WitExtensionContracts.IWorkItemLoadedArgs) => {
-                this._refreshItems();
+                this._refreshItems(false);
             },
             onUnloaded: (args: WitExtensionContracts.IWorkItemChangedArgs) => {
                 this.setState({...this.state, items: []});
             },
             onRefreshed: (args: WitExtensionContracts.IWorkItemChangedArgs) => {
-                this._refreshItems();
+                this._refreshItems(true);
             },
             onSaved: (args: WitExtensionContracts.IWorkItemChangedArgs) => {
-                this._refreshItems();
+                if (this.state.isNewWorkItem) {
+                    this._refreshItems(true);
+                }                
             }
         } as WitExtensionContracts.IWorkItemNotificationListener);
 
@@ -72,7 +75,8 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
             isLoaded: false,
             isNewWorkItem: false,
             itemText: "",
-            error: "",
+            inputError: "",
+            saveError: false,
             isPersonalView: true
         }
     }
@@ -94,6 +98,9 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
                             <PivotItem linkText="Personal" itemKey="personal" />
                             <PivotItem linkText="Shared" itemKey="shared" />
                         </Pivot>
+                        
+                        { this.state.saveError && (<MessagePanelComponent message={"Something went wrong. Please refresh the workitem to get the latest Checklist data."} messageType={MessageType.Error} />) }
+
                         <div className="checklist-items">
                             { 
                                 (currentModel == null || currentModel.items == null || currentModel.items.length == 0)
@@ -114,9 +121,9 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
                                 value={this.state.itemText}
                                 onChange={this._onItemTextChange} 
                                 onKeyUp={this._onEnterListItem}
-                                />
-                            { this.state.error && (<InputError error={this.state.error} />) }
+                                />                            
                         </div>
+                        { this.state.inputError && (<InputError error={this.state.inputError} />) }
                     </div>                    
                 </Fabric>
             );
@@ -125,7 +132,20 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
 
     @autobind
     private _onPivotChange(item: PivotItem) {
-        this.setState({...this.state, isPersonalView: item.props.itemKey === "personal", itemText: "", error: ""});
+        this.setState({...this.state, isPersonalView: item.props.itemKey === "personal", itemText: "", inputError: ""});
+    }
+
+    @autobind
+    private _onItemTextChange(e: React.ChangeEvent<HTMLInputElement>) {        
+        this.setState({...this.state, itemText: e.target.value, inputError: this._getItemTextError(e.target.value)});
+    }
+
+    @autobind
+    private _getItemTextError(value: string): string {
+        if (value.length > 128) {
+            return `The length of the title should less than 128 characters, actual is ${value.length}.`
+        }
+        return "";
     }
 
     @autobind
@@ -144,29 +164,21 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
 
             newModel.items = (newModel.items || []).concat({id: `${Date.now()}`, text: this.state.itemText, checked: false});
 
-            newModel = await ExtensionDataManager.writeDocument<IExtensionDataModel>("CheckListItems", newModel, this.state.isPersonalView);
+            try {
+                newModel = await ExtensionDataManager.writeDocument<IExtensionDataModel>("CheckListItems", newModel, this.state.isPersonalView);
 
-            if (this.state.isPersonalView) {
-                this.setState({...this.state, itemText: "", error: "", privateDataModel: newModel});
+                if (this.state.isPersonalView) {
+                    this.setState({...this.state, itemText: "", inputError: "", privateDataModel: newModel, saveError: false});
+                }
+                else {
+                    this.setState({...this.state, itemText: "", inputError: "", sharedDataModel: newModel, saveError: false});
+                }
             }
-            else {
-                this.setState({...this.state, itemText: "", error: "", sharedDataModel: newModel});
-            }
+            catch (e) {
+                this.setState({...this.state, saveError: true});
+            }        
         }        
-    }
-
-    @autobind
-    private _onItemTextChange(e: React.ChangeEvent<HTMLInputElement>) {        
-        this.setState({...this.state, itemText: e.target.value, error: this._getItemTextError(e.target.value)});
-    }
-
-    @autobind
-    private _getItemTextError(value: string): string {
-        if (value.length > 128) {
-            return `The length of the title should less than 128 characters, actual is ${value.length}.`
-        }
-        return "";
-    }
+    }    
 
     private _renderCheckListItems(items: IChecklistItem[]): React.ReactNode {
         return items.map((item: IChecklistItem, index: number) => {
@@ -178,7 +190,7 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
                         checked={item.checked}
                         onChange={(ev: React.FormEvent<HTMLElement>, isChecked: boolean) => this._onCheckboxChange(item.id, isChecked) } />         
 
-                    <IconButton icon="Delete" title="Delete item" onClick={() => this._onDeleteItem(item.id)} />
+                    <IconButton className="delete-item-button" icon="Delete" title="Delete item" onClick={() => this._onDeleteItem(item.id)} />
                 </div>
             );
         });
@@ -191,14 +203,19 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
         let newModel =  {...currentModel};
         Utils_Array.removeWhere(newModel.items, (item: IChecklistItem) => Utils_String.equals(item.id, itemId, true));
 
-        newModel = await ExtensionDataManager.writeDocument<IExtensionDataModel>("CheckListItems", newModel, this.state.isPersonalView);
+        try {
+            newModel = await ExtensionDataManager.writeDocument<IExtensionDataModel>("CheckListItems", newModel, this.state.isPersonalView);
 
-        if (this.state.isPersonalView) {
-            this.setState({...this.state, privateDataModel: newModel});
+            if (this.state.isPersonalView) {
+                this.setState({...this.state, privateDataModel: newModel, saveError: false});
+            }
+            else {
+                this.setState({...this.state, sharedDataModel: newModel, saveError: false});
+            }
         }
-        else {
-            this.setState({...this.state, sharedDataModel: newModel});
-        }
+        catch (e) {
+            this.setState({...this.state, saveError: true});
+        } 
     }
 
     @autobind
@@ -211,24 +228,31 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
             newModel.items[index].checked = isChecked;
         }
 
-        newModel = await ExtensionDataManager.writeDocument<IExtensionDataModel>("CheckListItems", newModel, this.state.isPersonalView);
+        try {
+            newModel = await ExtensionDataManager.writeDocument<IExtensionDataModel>("CheckListItems", newModel, this.state.isPersonalView);
 
-        if (this.state.isPersonalView) {
-            this.setState({...this.state, privateDataModel: newModel});
+            if (this.state.isPersonalView) {
+                this.setState({...this.state, privateDataModel: newModel, saveError: false});
+            }
+            else {
+                this.setState({...this.state, sharedDataModel: newModel, saveError: false});
+            }
         }
-        else {
-            this.setState({...this.state, sharedDataModel: newModel});
+        catch (e) {
+            this.setState({...this.state, saveError: true});
         }
     }
 
-    private async _refreshItems() {
-        this.setState({...this.state, privateDataModel: null, sharedDataModel: null, isLoaded: false, isNewWorkItem: false});
+    private async _refreshItems(hotReset: boolean) {
+        if (!hotReset) {
+            this.setState({...this.state, privateDataModel: null, sharedDataModel: null, isLoaded: false, isNewWorkItem: false});
+        }        
 
         const workItemFormService = await WorkItemFormService.getService();
         const isNew = await workItemFormService.isNew();
 
         if (isNew) {
-            this.setState({...this.state, privateDataModel: null, sharedDataModel: null, isLoaded: true, isNewWorkItem: true});
+            this.setState({...this.state, privateDataModel: null, sharedDataModel: null, isLoaded: true, error: "", saveError: false, itemText: "", isNewWorkItem: true});
         }
         else {
             const workItemId = await workItemFormService.getId();
@@ -237,7 +261,7 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
                 ExtensionDataManager.readDocument<IExtensionDataModel>("CheckListItems", `${workItemId}`, false)
             ]);
 
-            this.setState({...this.state, privateDataModel: models[0], sharedDataModel: models[1], isLoaded: true, isNewWorkItem: false});
+            this.setState({...this.state, privateDataModel: models[0], sharedDataModel: models[1], isLoaded: true, isNewWorkItem: false, error: "", saveError: false, itemText: ""});
         }
     }
 }

@@ -3,10 +3,7 @@
 #ext-container {
     .plaintext-control {
         padding-left: 3px;
-
-        .message-text {
-            word-wrap: break-word;
-            color: #666;
-        }
+        color: #666;
+        font-size: 12px;
     }
 }

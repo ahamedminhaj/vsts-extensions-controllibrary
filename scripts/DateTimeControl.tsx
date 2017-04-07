@@ -37,10 +37,10 @@ export class DateTimeControl extends BaseFieldControl<IBaseFieldControlProps, IB
 
     private _onToggle(on: any) {
         if (on === "calendar") {
-            $("#ext-container").height(470);
+            $("#ext-container").height(450);
         }
         else if (on === "time") {
-            $("#ext-container").height(270);
+            $("#ext-container").height(250);
         }
         else {
             $("#ext-container").css("height", "auto");

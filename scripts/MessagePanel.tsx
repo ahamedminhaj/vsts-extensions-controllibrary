@@ -3,6 +3,9 @@ import "../css/MessagePanel.scss";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
+import {Icon, IconName} from "OfficeFabric/Icon";
+import {Label} from "OfficeFabric/Label";
+
 import {AutoResizableComponent} from "./AutoResizableComponent";
 
 interface IMessagePanelInputs {
@@ -24,32 +27,32 @@ export enum MessageType {
 
 export var MessagePanelComponent: React.StatelessComponent<IMessagePanelProps> =
     (props: IMessagePanelProps): JSX.Element => {
-        let className = "bowtie-fabric message-panel";
-        let iconClass: string = "";
+        let className = "message-panel";
+        let iconName: IconName;
 
         switch (props.messageType) {
             case MessageType.Error:
-                iconClass = "bowtie-icon bowtie-status-failure";
+                iconName = "StatusErrorFull";
                 className += " message-error";
                 break;
             case MessageType.Warning:
-                iconClass = "bowtie-icon bowtie-status-warning";
+                iconName = "Warning";
                 className += " message-warning";
                 break;
             case MessageType.Success:
-                iconClass = "bowtie-icon bowtie-status-success-outline";
+                iconName = "SkypeCircleCheck";
                 className += " message-success";
                 break;
             default:
-                iconClass = "bowtie-icon bowtie-status-info";
+                iconName = "Info";
                 className += " message-info";
                 break;
         }
 
         return (
             <div className={className}>
-                <span className={iconClass} />    
-                <span className="message-text">{props.message}</span>
+                <Icon className="icon" iconName={iconName} />
+                <Label className="message-text">{props.message}</Label>
             </div>
         );
 }
