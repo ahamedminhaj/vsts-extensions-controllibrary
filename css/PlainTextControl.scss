@@ -1,1 +1,12 @@
 @import "base";
+
+#ext-container {
+    .plaintext-control {
+        padding-left: 3px;
+
+        .message-text {
+            word-wrap: break-word;
+            color: #666;
+        }
+    }
+}

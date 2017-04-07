@@ -42,7 +42,7 @@ export class RatingControl extends BaseFieldControl<IRatingControlProps, IBaseFi
     }
 }
 
-export async function init() {
+export function init() {
     let inputs = BaseFieldControl.getInputs<IRatingControlInputs>();
 
     ReactDOM.render(

@@ -60,7 +60,7 @@ export class MultiValueControl extends BaseFieldControl<IMultiValueControlProps,
     }
 }
 
-export async function init() {
+export function init() {
     let inputs = BaseFieldControl.getInputs<IMultiValueControlInputs>();
     
     let values = inputs.Values;

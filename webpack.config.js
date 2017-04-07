@@ -12,6 +12,7 @@ module.exports = {
         PlainTextControl: "./scripts/PlainTextControl.tsx",
         SliderControl: "./scripts/SliderControl.tsx",
         RatingControl: "./scripts/RatingControl.tsx",
+        MessagePanel: "./scripts/MessagePanel.tsx",
         Checklist: "./scripts/Checklist.tsx"
     },
     output: {

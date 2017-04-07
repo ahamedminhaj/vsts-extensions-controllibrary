@@ -49,7 +49,7 @@ export class PatternControl extends BaseFieldControl<IPatternControlProps, IBase
     }
 }
 
-export async function init() {
+export function init() {
     let inputs = BaseFieldControl.getInputs<IPatternControlInputs>();
     
     ReactDOM.render(

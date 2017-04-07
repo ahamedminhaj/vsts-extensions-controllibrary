@@ -44,7 +44,7 @@ export class SliderControl extends BaseFieldControl<ISliderControlProps, IBaseFi
     }
 }
 
-export async function init() {
+export function init() {
     let inputs = BaseFieldControl.getInputs<ISliderControlInputs>();
     
     ReactDOM.render(

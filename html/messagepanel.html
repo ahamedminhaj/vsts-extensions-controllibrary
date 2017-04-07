@@ -12,12 +12,12 @@
         VSS.init({
             explicitNotifyLoaded: true,
             usePlatformScripts: true,
-            usePlatformStyles: true,
+            usePlatformStyles: true
         });
         
         // Load main entry point for extension
-        VSS.require(["../scripts/PlainTextControl"], function (PlainTextControl) {            
-            PlainTextControl.init();
+        VSS.require(["../scripts/MessagePanel"], function (MessagePanel) {            
+            MessagePanel.init();
             VSS.notifyLoadSucceeded();            
         });
     </script>

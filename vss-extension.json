@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "vsts-wit-control-library",
-    "version": "1.0.10",
+    "version": "1.0.12",
     "name": "Control library for VSTS work item form",
     "description": "A control library extension for VSTS work item form",
     "publisher": "mohitbagra",
@@ -88,6 +88,63 @@
             }
         },
         {
+            "id": "messagepanel-form-control",
+            "type": "ms.vss-work-web.work-item-form-control",
+            "description": "A message panel control for work item form.",
+            "targets": [
+                "ms.vss-work-web.work-item-form"
+            ],
+            "properties": {
+                "name": "Message Panel",
+                "uri": "html/messagepanel.html",
+                "height": 50,
+                "inputs": [
+                    {
+                        "id":"Message",
+                        "name": "Enter message",
+                        "description": "Enter message",
+                        "inputMode": "TextArea",
+                        "validation": {
+                            "dataType": "String",
+                            "isRequired": true
+                        }
+                    },
+                    {
+                        "id":"MessageType",
+                        "name": "Enter message type",
+                        "description": "Enter message type",
+                        "inputMode": "Combo",
+                        "values": {
+                            "defaultValue": "Info",
+                            "isLimitedToPossibleValues": true,
+                            "possibleValues": [
+                                {
+                                    "displayValue": "Info",
+                                    "value": "Info"
+                                },
+                                {
+                                    "displayValue": "Error",
+                                    "value": "Error"
+                                },
+                                {
+                                    "displayValue": "Warning",
+                                    "value": "Warning"
+                                },
+                                {
+                                    "displayValue": "Success",
+                                    "value": "Success"
+                                }
+                            ]
+                        },
+                        "validation": {
+                            "dataType": "String",
+                            "isRequired": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
             "id": "plaintext-form-control",
             "type": "ms.vss-work-web.work-item-form-control",
             "description": "A plain text control for work item form.",
@@ -103,6 +160,7 @@
                         "id":"Text",
                         "name": "Enter text",
                         "description": "Enter text",
+                        "inputMode": "TextArea",
                         "validation": {
                             "dataType": "String",
                             "isRequired": true
@@ -269,6 +327,7 @@
                         "id":"Pattern",
                         "name": "Regex pattern",
                         "description": "Choose pattern for the field's value. A pattern should be a valid javascript regex string",
+                        "inputMode": "TextArea",
                         "validation": {
                             "dataType": "String",
                             "isRequired": true
@@ -306,6 +365,7 @@
                         "id":"Values",
                         "name": "Suggested Values",
                         "description": "Enter suggested values for the control (semicolon separated)",
+                        "inputMode": "TextArea",
                         "validation": {
                             "dataType": "String",
                             "isRequired": true

@@ -1,9 +1,10 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import * as Utils_Core from "VSS/Utils/Core";
 import * as WitExtensionContracts  from "TFS/WorkItemTracking/ExtensionContracts";
 import { WorkItemFormService, IWorkItemFormService } from "TFS/WorkItemTracking/Services";
+
+import {AutoResizableComponent} from "./AutoResizableComponent";
 
 export interface IBaseFieldControlProps {
     fieldName: string;
@@ -14,16 +15,12 @@ export interface IBaseFieldControlState {
     value?: any;
 }
 
-export class BaseFieldControl<TP extends IBaseFieldControlProps, TS extends IBaseFieldControlState> extends React.Component<TP, TS> {
+export class BaseFieldControl<TP extends IBaseFieldControlProps, TS extends IBaseFieldControlState> extends AutoResizableComponent<TP, TS> {
     public static getInputs<T>() {
         return VSS.getConfiguration().witInputs as T;
     }
 
     private _flushing: boolean;
-    private _bodyElement: HTMLBodyElement;
-    private _windowWidth: number;
-    private _minWindowWidthDelta: number = 10; // Minum change in window width to react to
-    private _windowResizeThrottleDelegate: Function;
     
     constructor(props: TP, context?: any) {
         super(props, context);
@@ -40,33 +37,9 @@ export class BaseFieldControl<TP extends IBaseFieldControlProps, TS extends IBas
                     this._invalidate();
                 }   
             },
-        } as WitExtensionContracts.IWorkItemNotificationListener);    
-
-        this._windowResizeThrottleDelegate = Utils_Core.throttledDelegate(this, 50, () => {
-            this._windowWidth = window.innerWidth;
-            this.resize();
-        });
-
-        this._windowWidth = window.innerWidth;
-        $(window).resize(() => {
-            if(Math.abs(this._windowWidth - window.innerWidth) > this._minWindowWidthDelta) {
-               this._windowResizeThrottleDelegate.call(this);
-            }
-        });      
+        } as WitExtensionContracts.IWorkItemNotificationListener);
 
         this.initializeState(props);
-    }
-
-    public render(): JSX.Element {
-        return null;
-    }
-
-    public componentDidMount() {
-        this.resize();
-    }
-
-    public componentDidUpdate() {
-        this.resize();
     }
 
     protected initializeState(props: TP) {
@@ -93,21 +66,6 @@ export class BaseFieldControl<TP extends IBaseFieldControlProps, TS extends IBas
 
     protected getErrorMessage(value: string): string {
         return "";
-    }
-
-    protected resize(delay?: number) {
-        const f = () => {
-            this._bodyElement = document.getElementsByTagName("body").item(0) as HTMLBodyElement;            
-            (VSS as any).resize(null, this._bodyElement.offsetHeight);  
-        }
-        const throttle = Utils_Core.throttledDelegate(this, delay, f);
-
-        if (delay) {
-            throttle();
-        }
-        else {
-            f();
-        }
     }
 
     /**

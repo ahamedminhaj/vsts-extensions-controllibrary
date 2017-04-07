@@ -50,7 +50,7 @@ export class DateTimeControl extends BaseFieldControl<IBaseFieldControlProps, IB
     }
 }
 
-export async function init() {
+export function init() {
     MomentLocalizer(Moment);
     let inputs = BaseFieldControl.getInputs<IDateTimeControlInputs>();
 
