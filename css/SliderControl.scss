@@ -3,5 +3,13 @@
 #ext-container {
     .slider-control {
         margin-bottom: 0;
+
+        label {
+            width: auto;
+            overflow: hidden;
+            max-width: 50px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     }
 }

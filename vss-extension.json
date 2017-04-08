@@ -1,8 +1,8 @@
 {
     "manifestVersion": 1,
     "id": "vsts-wit-control-library",
-    "version": "1.0.13",
-    "name": "Control library for VSTS work item form",
+    "version": "1.0.3",
+    "name": "Work item form control library",
     "description": "A control library extension for VSTS work item form",
     "publisher": "mohitbagra",
     "icons": {
@@ -18,7 +18,7 @@
         }
     ],
     "tags": [
-        "Work Item"
+        "Work Item", "Work Item form", "Work item form custom control"
     ],
     "content": {
         "details": {
@@ -200,7 +200,7 @@
         {
             "id": "rating-form-control",
             "type": "ms.vss-work-web.work-item-form-control",
-            "description": "A work item form control which shows the numeric field value as a star rating control.",
+            "description": "A work item form control which shows the integer field value as a star rating control.",
             "targets": [
                 "ms.vss-work-web.work-item-form"
             ],
@@ -212,7 +212,7 @@
                     {
                         "id":"FieldName",
                         "name": "Select field",
-                        "description": "Select the numeric field for this control",
+                        "description": "Select the integer field for this control",
                         "type": "WorkItemField",
                         "properties": {
                             "workItemFieldTypes": ["Integer"]
@@ -225,7 +225,7 @@
                     {
                         "id":"MinValue",
                         "name": "Min value (should be greater than 0)",
-                        "description": "Enter minimum numeric value for the rating",
+                        "description": "Enter minimum integer value for the rating",
                         "validation": {
                             "dataType": "Number",
                             "isRequired": true
@@ -234,7 +234,7 @@
                     {
                         "id":"MaxValue",
                         "name": "Max value",
-                        "description": "Enter maximum numeric value for the rating",
+                        "description": "Enter maximum integer value for the rating",
                         "validation": {
                             "dataType": "Number",
                             "isRequired": true
@@ -261,7 +261,7 @@
                         "description": "Select the numeric field for this control",
                         "type": "WorkItemField",
                         "properties": {
-                            "workItemFieldTypes": ["Integer"]
+                            "workItemFieldTypes": ["Integer", "Double"]
                         },
                         "validation": {
                             "dataType": "String",
@@ -270,7 +270,7 @@
                     },
                     {
                         "id":"MinValue",
-                        "name": "Min value (should be greater than 0)",
+                        "name": "Min value",
                         "description": "Enter minimum numeric value for the slider",
                         "validation": {
                             "dataType": "Number",
@@ -289,7 +289,7 @@
                     {
                         "id":"StepSize",
                         "name": "Step size",
-                        "description": "Enter step size for the slider",
+                        "description": "Enter numeric step size for the slider",
                         "validation": {
                             "dataType": "Number",
                             "isRequired": true
@@ -331,6 +331,16 @@
                         "validation": {
                             "dataType": "String",
                             "isRequired": true
+                        }
+                    },
+                    {
+                        "id":"ErrorMessage",
+                        "name": "Error message",
+                        "description": "Enter an error message that would be shown to users if the user entered value doesnt match the pattern.",
+                        "inputMode": "TextArea",
+                        "validation": {
+                            "dataType": "String",
+                            "isRequired": false
                         }
                     }
                 ]

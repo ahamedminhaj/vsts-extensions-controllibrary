@@ -12,10 +12,12 @@ import {InputError} from "./InputError";
 interface IPatternControlInputs {
     FieldName: string;
     Pattern: string;
+    ErrorMessage?: string;
 }
 
 interface IPatternControlProps extends IBaseFieldControlProps {
     pattern: string;
+    errorMessage: string;
 }
 
 export class PatternControl extends BaseFieldControl<IPatternControlProps, IBaseFieldControlState> {
@@ -42,7 +44,7 @@ export class PatternControl extends BaseFieldControl<IPatternControlProps, IBase
     protected getErrorMessage(value: string): string {
         if (value) {
             var patt = new RegExp(this.props.pattern);
-            return patt.test(value) ? "" : "Pattern doesnt match";
+            return patt.test(value) ? "" : this.props.errorMessage;
         }
 
         return "";
@@ -56,5 +58,6 @@ export function init() {
         <PatternControl 
             fieldName={inputs.FieldName} 
             pattern={inputs.Pattern}
+            errorMessage={inputs.ErrorMessage && inputs.ErrorMessage.trim() || "The entered value does not match the control's pattern."}
         />, $("#ext-container")[0]);
 }

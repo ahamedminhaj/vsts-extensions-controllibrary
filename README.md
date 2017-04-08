@@ -1,55 +1,124 @@
-# Manage team wide bug bashes
-A work item hub extension that lets teams manage their bug bashes in a more efficient manner. When a new feature is being tested either org wide or team wide, a lots of bugs are created and its hard to track all the bugs created in one instance of testing. Users can use features like work item templates to use pre-defined set of field values while creating bugs and then track them using work item queries, but its a tedious process in 2 ways - 
+# VSTS Work item form control library
+This extension is a library of several custom controls and groups targeting work item form. A work item form in VSTS can be extended via extensions. Users can write their own custom controls, groups or pages that would show up in VSTS work item form in web. For reference, visit <a href="https://www.visualstudio.com/en-us/docs/integrate/extensions/develop/add-workitem-extension">Extend the work item form</a>.
 
-1. A work item form needs to be opened each time to create a workitem.
-2. To track all workitems in the bug bash, you need to navigate to the query view which makes you lose work item form view.
+If you are using TFS, you can add these controls to work item form via work item type xml file - <a href="https://www.visualstudio.com/en-us/docs/integrate/extensions/develop/configure-workitemform-extensions">Add extensions in work item form via work item type definition xml</a>.
 
-Some teams use tools like OneNote or other note syncing apps where users can track all the workitems and add new workitems in the same page, but then someone has to manually create VSTS workitems from that note.
+If you are using VSTS, you can add them from process admin page -<a href="https://www.visualstudio.com/en-us/docs/work/process/custom-controls-process">Add or modify a custom control for a process and WIT</a>.
 
-This extension tries to simplify this in 2 ways -
+A work item form custom control can take some user inputs to configure the control. I'll describe what inputs are required for eah of the control below.
 
-1. View all the workitems created in a bug bash instance while creating a new workitem.
-2. Quickly accept/reject workitems.
+This extension is an attempt to provide samples to other users to help them write their own extensions targeting work item form. There are 8 work item contributions in this extension, 7 of which are custom controls and 1 is a form group contribution -
 
-<a name="overview"></a>
-#### Overview ####
-The home page of the extension shows all the past/ongoing/upcoming bug bash instances. 
+* <a href="#datetime">DateTime Control</a>
+* <a href="#pattern">Pattern Control</a>
+* <a href="#slider">Slider Control</a>
+* <a href="#rating">Rating Control</a>
+* <a href="#multivalue">Autocomplete Multivalue Control</a>
+* <a href="#plaintext">Plain Text Control</a>
+* <a href="#messagepanel">Message Panel Control</a>
+* <a href="#checklist">Checklist Group</a>
 
-![Group](img/homepage.png)
+The code for this extension is on <a href="https://github.com/mohitbagra/vsts-extensions-controllibrary">github</a>
 
-To create a new bug bash instance, click "New", which opens the bug bash editor
+<a name="datetime"></a>
+#### DateTime Control ####
+A custom date time control for DateTime fields which also lets users pick time, which is not possible by the default DateTime control on work item form.
 
-![Group](img/editor.png)
+![Group](img/datetime.png)
 
-You can enter bug bash information in the editor to create it. Here are the properties of a bug bash instances -
+To select a date, click the calendar icon on the right.
 
-1. **Title** *(required)* - The title of the bug bash instance
-2. **Description** - A short description about the bug bash. It can describe what the bug bash is for. What features need to be tested etc.
-3. **Start Date** - A start date for the bug bash. This is not a required field. An empty start date means the bug bash is ongoing until it ends.
-4. **End Date** - An end date for the bug bash. This is not a required field. An empty end date means the bug bash never ends.
-5. **Work item type** *(required)* - Describes which type of workitem this bug bash instance associates with. 
-6. **Work item template** - You can choose a work item template that would be used to autofill certain field values for each new workitem created in this bug bash instance. A work item template can be created from VSTS team admin view. Note that work item templates are team scoped, so in this dropdown, you can only choose templates which are in the scope of the current team.
-7. **Manually entered fields** *(required)* - Pick a set of fields which the users need to fill while creating workitems in this instance of bug bash.
-8. **Accept Workitem template** - Select which template should be applied to a workitem when a user accepts it in the bug bash's results view. 
-9. **Reject Workitem template** - Select which template should be applied to a workitem when a user rejects it in the bug bash's results view. 
+![Group](img/datetime_date.png)
 
-*P.S.* : Work item templates are defined per team per workitem type. So the templates in the dropdowns would be scoped to the current team and the workitem type selected from WorkItemType dropdown. Since the templates are team scoped, each bug bash instance is also scoped to a team. So the bug bash instance created in the context of team "t1" would not show up in the bug bash view in team "t2".
+To select a time, click the clock icon on the right.
 
-![Group](img/editview.png)
+![Group](img/datetime_time.png)
 
-Once saved, click on "Show Results" to go to the results view of this bug bash instance.
+>*Inputs* -
+>1. **FieldName** *(required)* - A DateTime field associated with this control. The value of the datetime control would be bound to this field's value.
 
-![Group](img/results.png)
 
-In the results view, users can view all the workitems created in this bug bash instance and also users can create new workitems in this bug bash. The workitems are associated with a particular bug bash instance via work item tags. If a workitem has a tag - "BugBash\_123", then it falls under the bug bash which has id 123. The bug bash id is of type "long int". When a new workitem is created from the right panel in this view, the workitem is created by using the user entered field values (Title and Repro steps in this case) and the work item template selected during bug bash creation. And then to associate the workitem with this instance of bug bash, a work item tag "BugBash_123" is added to the workitem.
-To accept a workitem, click on blue arrow button, to reject a workitem click on red cross button. When a workitem(s) is accepted, it applies the "Accept work item template" to the workitem (if its specified in the bug bash) and then adds a tag "BugBashItemAccepted" to the workitem to mark it as accepted in the bug bash. When a workitem(s) is rejected, it applies the "Reject work item template" to the workitem (if its specified in the bug bash) and then adds a tag "BugBashItemRejected" to the workitem to mark it as accepted in the bug bash. 
+<a name="pattern"></a>
+#### Pattern Control ####
+A custom text control for string or multiline string fields which restricts the field value to a certain regex pattern. Note that the restriction would only work in this custom control as the pattern would not apply to the actual work item field. If users enter a wrong pattern in this control, it'll show an error below the control but the work item would still be saveable because work item form extensions cannot block work item save right now. 
 
-**Other Operations**
-1. *Open as Query* - Opens selected (or all) workitems as a VSTS query. 
-2. *Unlink workitems* - Unlinks selected (or all) workitems from this bug bash instance. By unlinking, I mean that it will remove the "BugBash_123", "BugBashItemAccepted" and "BugBashItemRejected" tags from the workitems which breaks the link between the workitem and a bug bash instance.
+![Group](img/pattern.png)
 
-*P.S* - Each work item row in the results view also has a context menu. So users can right click on a row (or on multiple selected rows) to open the context menu.
+In the example above, there are 2 instances of pattern control - the first one requires the value to be an email. The 2nd one requires it to be a phone number. If the value entered by user doesnt match the pattern, it'll show an error.
+If the value matches the pattern, then no error would be shown. Note that work item would still be saveable even if the control shows error.
 
-#### Future plans ####
-1. Investigate "Auto refresh" feature in the results view.
-2. Add a "Merge" action in workitem row's context menu which merges duplicate workitems into one.
+![Group](img/pattern_correct.png)
+
+>*Inputs* -
+>1. **FieldName** *(required)* - A String or a Multiline string field associated with this control. The value of the pattern control would be bound to this field's value.
+>2. **Pattern** *(required)* - A regex pattern for this control. It should be a valid javascript regex pattern string without the leading and trailing forward slash character.
+>3. **ErrorMessage** *(required)* - A custom error message to be shown to user if the value entered in the control doesnt match the pattern.
+
+*Some common regex patterns*
+1. **Email** - ^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$
+2. **Phone Number** - ^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$
+3. **Guid** - ^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
+4. **URL** - https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)
+
+<a name="slider"></a>
+#### Slider Control ####
+A custom control that shows a numeric field as a slider control
+
+![Group](img/slider.png)
+
+>*Inputs* -
+>1. **FieldName** *(required)* - A numeric field (Integer or Decimal) associated with this control. The value of the pattern control would be bound to this field's value.
+>2. **MinValue** *(required)* - The min numeric value of the field.
+>3. **MaxValue** *(required)* - The max numeric value of the field.
+>3. **StepSize** *(required)* - The numeric step size for the slider.
+
+<a name="rating"></a>
+#### Rating Control ####
+A custom control that shows an integer field as a star rating control
+
+![Group](img/rating.png)
+
+>*Inputs* -
+>1. **FieldName** *(required)* - An integer field associated with this control. The value of the pattern control would be bound to this field's value.
+>2. **MinValue** *(required)* - The min integer value of the field.
+>3. **MaxValue** *(required)* - The max integer value of the field.
+
+<a name="multivalue"></a>
+#### Autocomplete Multivalue ####
+A custom control that lets user pick multiple values for a string (or a multiline string) field using an autocomplete widget.
+
+![Group](img/multivalue.png)
+
+![Group](img/multivalue_open.png)
+
+>*Inputs* -
+>1. **FieldName** *(required)* - An integer field associated with this control. The value of the pattern control would be bound to this field's value.
+>2. **Values** *(required)* - A semicolon separated string of suggested values for the control.
+
+<a name="plaintext"></a>
+#### Plain Text Control ####
+A custom control that shows the configured string as a plain text. This control is not bound to any field.
+
+![Group](img/plaintext.png)
+
+>*Inputs* -
+>1. **Text** *(required)* - The text to show in the control.
+
+<a name="messagepanel"></a>
+#### Message Panel Control ####
+A custom control that shows the configured string as a message. It supports 4 types of messages - Error, Warning, Success and Info. This control is not bound to any field.
+
+![Group](img/message.png)
+
+>*Inputs* -
+>1. **Message** *(required)* - The message to show in the control.
+>2. **MessageType** *(required)* - The type of message to show. Can be either "Error", "Warning", "Info" or "Success"
+
+<a name="checklist"></a>
+#### Checklist Group ####
+A custom group that lets user enter TODO list items for an individual workitem. These list items are not stored as any other workitem types in VSTS but just stored in the extension's data storage. These items are not bound to any field. 
+Users can enter, remove any checklist item and mark them as checked or unchecked. This extension shows 2 types of checklists - "Personal" and "Shared". Personal checklist is private to each user. Shared list is shared with the whole account for a workitem. The items are stored per workitem, so each workitem would have its own checklist.
+
+![Group](img/checklist.png)
+
+Since this is a group extension, it doesnt take any user input, like control extension does.

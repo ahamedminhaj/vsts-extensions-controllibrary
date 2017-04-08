@@ -50,8 +50,8 @@ export function init() {
     ReactDOM.render(
         <SliderControl 
             fieldName={inputs.FieldName} 
-            minValue={parseInt(inputs.MinValue)}
-            maxValue={parseInt(inputs.MaxValue)}
-            stepSize={parseInt(inputs.StepSize)}
+            minValue={parseFloat(inputs.MinValue)}
+            maxValue={parseFloat(inputs.MaxValue)}
+            stepSize={parseFloat(inputs.StepSize)}
         />, $("#ext-container")[0]);
 }
