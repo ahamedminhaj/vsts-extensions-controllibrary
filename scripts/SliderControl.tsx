@@ -29,14 +29,18 @@ export class SliderControl extends BaseFieldControl<ISliderControlProps, IBaseFi
 
         return (
             <Fabric className="fabric-container">
-                <Slider 
-                    className={className} 
-                    value={this.state.value}
-                    min={this.props.minValue}
-                    max={this.props.maxValue}
-                    step={this.props.stepSize}
-                    showValue={true}
-                    onChange={(newValue: number) => this.onValueChanged(newValue)} />
+                <div className="slider-container">
+                    <Slider 
+                        className={className} 
+                        value={this.state.value}
+                        min={this.props.minValue}
+                        max={this.props.maxValue}
+                        step={this.props.stepSize}
+                        showValue={false}
+                        onChange={(newValue: number) => this.onValueChanged(parseFloat(newValue.toPrecision(10)))} />
+
+                    <span className="slider-value" title={this.state.value || 0}>{this.state.value || 0}</span>
+                </div>                
 
                 { this.state.error && (<InputError error={this.state.error} />) }
             </Fabric>

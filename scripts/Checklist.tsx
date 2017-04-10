@@ -99,7 +99,12 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
                             <PivotItem linkText="Shared" itemKey="shared" />
                         </Pivot>
                         
-                        { this.state.saveError && (<MessagePanelComponent message={"Something went wrong. Please refresh the workitem to get the latest Checklist data."} messageType={MessageType.Error} />) }
+                        { 
+                            this.state.saveError && 
+                            (<MessagePanelComponent 
+                                message={"The current version of checklist doesn't match the version of checklist in this workitem. Please refresh the workitem to get the latest Checklist data."} 
+                                messageType={MessageType.Error} />)
+                        }
 
                         <div className="checklist-items">
                             { 
