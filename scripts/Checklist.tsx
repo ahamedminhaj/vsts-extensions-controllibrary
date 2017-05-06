@@ -18,7 +18,7 @@ import * as Utils_Array from "VSS/Utils/Array";
 import * as Utils_String from "VSS/Utils/String";
 
 import {AutoResizableComponent} from "VSTS_Extension/Components/WorkItemControls/AutoResizableComponent";
-import {ExtensionDataManager} from "VSTS_Extension/Utilities//ExtensionDataManager";
+import {ExtensionDataManager} from "VSTS_Extension/Utilities/ExtensionDataManager";
 import {Loading} from "VSTS_Extension/Components/Common/Loading";
 import {InputError} from "VSTS_Extension/Components/Common/InputError";
 
