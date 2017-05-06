@@ -1,5 +1,5 @@
 # VSTS Work item form control library
-This extension is a library of several custom controls and groups targeting work item form. A work item form in VSTS can be extended via extensions. Users can write their own custom controls, groups or pages that would show up in VSTS work item form in web. For reference, visit <a href="https://www.visualstudio.com/en-us/docs/integrate/extensions/develop/add-workitem-extension">Extend the work item form</a>.
+This extension is a library of several custom controls targeting work item form. A work item form in VSTS can be extended via extensions. Users can write their own custom controls, groups or pages that would show up in VSTS work item form in web. For reference, visit <a href="https://www.visualstudio.com/en-us/docs/integrate/extensions/develop/add-workitem-extension">Extend the work item form</a>.
 
 If you are using TFS, you can add these controls to work item form via work item type xml file - <a href="https://www.visualstudio.com/en-us/docs/integrate/extensions/develop/configure-workitemform-extensions">Add extensions in work item form via work item type definition xml</a>.
 
@@ -7,7 +7,7 @@ If you are using VSTS, you can add them from process admin page -<a href="https:
 
 A work item form custom control can take some user inputs to configure the control. I'll describe what inputs are required for eah of the control below.
 
-This extension is an attempt to provide samples to other users to help them write their own extensions targeting work item form. There are 8 work item contributions in this extension, 7 of which are custom controls and 1 is a form group contribution -
+This extension is an attempt to provide samples to other users to help them write their own extensions targeting work item form. There are 6 work item control contributions in this extension -
 
 * <a href="#datetime">DateTime Control</a>
 * <a href="#pattern">Pattern Control</a>
@@ -15,8 +15,6 @@ This extension is an attempt to provide samples to other users to help them writ
 * <a href="#rating">Rating Control</a>
 * <a href="#multivalue">Autocomplete Multivalue Control</a>
 * <a href="#plaintext">Plain Text Control</a>
-* <a href="#messagepanel">Message Panel Control</a>
-* <a href="#checklist">Checklist Group</a>
 
 The code for this extension is on <a href="https://github.com/mohitbagra/vsts-extensions-controllibrary">github</a>
 
@@ -103,22 +101,3 @@ A custom control that shows the configured string as a plain text. This control 
 
 >*Inputs* -
 >1. **Text** *(required)* - The text to show in the control.
-
-<a name="messagepanel"></a>
-#### Message Panel Control ####
-A custom control that shows the configured string as a message. It supports 4 types of messages - Error, Warning, Success and Info. This control is not bound to any field.
-
-![Group](img/message.png)
-
->*Inputs* -
->1. **Message** *(required)* - The message to show in the control.
->2. **MessageType** *(required)* - The type of message to show. Can be either "Error", "Warning", "Info" or "Success"
-
-<a name="checklist"></a>
-#### Checklist Group ####
-A custom group that lets user enter TODO list items for an individual workitem. These list items are not stored as any other workitem types in VSTS but just stored in the extension's data storage. These items are not bound to any field. 
-Users can enter, remove any checklist item and mark them as checked or unchecked. This extension shows 2 types of checklists - "Personal" and "Shared". Personal checklist is private to each user. Shared list is shared with the whole account for a workitem. The items are stored per workitem, so each workitem would have its own checklist.
-
-![Group](img/checklist.png)
-
-Since this is a group extension, it doesnt take any user input, like control extension does.

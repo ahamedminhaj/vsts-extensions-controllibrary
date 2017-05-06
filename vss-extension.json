@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "vsts-wit-control-library",
-    "version": "1.0.4",
+    "version": "1.0.7",
     "name": "Work item form control library",
     "description": "A control library extension for VSTS work item form",
     "publisher": "mohitbagra",
@@ -14,39 +14,29 @@
 	 ],
     "targets": [
         {
-            "id": "Microsoft.VisualStudio.Services"
+            "id": "Microsoft.VisualStudio.Services.Cloud"
+        },
+        {
+            "id": "Microsoft.TeamFoundation.Server",
+            "version": "[15.0,)"
         }
     ],
     "tags": [
-        "Work Item", "Work Item form", "Work item form custom control"
+        "Work Item", 
+        "Work Item form", 
+        "Work item form custom control"
     ],
     "content": {
         "details": {
             "path": "README.md"
         }
     },
-     "links": {
-        "home": {
-            "uri": "https://github.com/mohitbagra/vsts-extensions-controllibrary"
-        },
-        "getstarted": {
-            "uri": "https://github.com/mohitbagra/vsts-extensions-controllibrary"
-        },
-        "learn": {
-            "uri": "https://github.com/mohitbagra/vsts-extensions-controllibrary"
-        },
-        "repository": {
-            "uri": "https://github.com/mohitbagra/vsts-extensions-controllibrary"
-        },
-        "issues": {
-            "uri": "https://github.com/mohitbagra/vsts-extensions-controllibrary/issues"
-        },
-        "support": {
-            "uri": "https://github.com/mohitbagra/vsts-extensions-controllibrary/issues"
-        }
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/mohitbagra/vsts-extensions-controllibrary"
     },
     "branding": {
-        "color": "#5C2D91",
+        "color": "#106ebe",
         "theme": "dark"
     },    
     "categories": [
@@ -85,63 +75,6 @@
             "properties": {
                 "name": "Checklist",
                 "uri": "html/checklist.html"
-            }
-        },
-        {
-            "id": "messagepanel-form-control",
-            "type": "ms.vss-work-web.work-item-form-control",
-            "description": "A message panel control for work item form.",
-            "targets": [
-                "ms.vss-work-web.work-item-form"
-            ],
-            "properties": {
-                "name": "Message Panel",
-                "uri": "html/messagepanel.html",
-                "height": 50,
-                "inputs": [
-                    {
-                        "id":"Message",
-                        "name": "Enter message",
-                        "description": "Enter message",
-                        "inputMode": "TextArea",
-                        "validation": {
-                            "dataType": "String",
-                            "isRequired": true
-                        }
-                    },
-                    {
-                        "id":"MessageType",
-                        "name": "Enter message type",
-                        "description": "Enter message type",
-                        "inputMode": "Combo",
-                        "values": {
-                            "defaultValue": "Info",
-                            "isLimitedToPossibleValues": true,
-                            "possibleValues": [
-                                {
-                                    "displayValue": "Info",
-                                    "value": "Info"
-                                },
-                                {
-                                    "displayValue": "Error",
-                                    "value": "Error"
-                                },
-                                {
-                                    "displayValue": "Warning",
-                                    "value": "Warning"
-                                },
-                                {
-                                    "displayValue": "Success",
-                                    "value": "Success"
-                                }
-                            ]
-                        },
-                        "validation": {
-                            "dataType": "String",
-                            "isRequired": true
-                        }
-                    }
-                ]
             }
         },
         {

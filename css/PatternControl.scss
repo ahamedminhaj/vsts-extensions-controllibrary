@@ -4,6 +4,10 @@
     .pattern-control {
         margin:0;
         
+        > div {
+            border: 1px solid transparent;
+        }
+        
         .pattern-control-input {
             height: 24px;
             border: 1px solid transparent;

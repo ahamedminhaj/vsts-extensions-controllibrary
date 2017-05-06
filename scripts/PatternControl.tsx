@@ -5,9 +5,10 @@ import * as ReactDOM from "react-dom";
 
 import { Fabric } from "OfficeFabric/Fabric";
 import { TextField } from 'OfficeFabric/components/TextField';
+import { WorkItemFormService, IWorkItemFormService } from "TFS/WorkItemTracking/Services";
 
-import {BaseFieldControl, IBaseFieldControlProps, IBaseFieldControlState} from "./BaseFieldControl";
-import {InputError} from "./InputError";
+import {FieldControl, IFieldControlProps, IFieldControlState} from "VSTS_Extension/Components/WorkItemControls/FieldControl";
+import {InputError} from "VSTS_Extension/Components/Common/InputError";
 
 interface IPatternControlInputs {
     FieldName: string;
@@ -15,12 +16,13 @@ interface IPatternControlInputs {
     ErrorMessage?: string;
 }
 
-interface IPatternControlProps extends IBaseFieldControlProps {
+interface IPatternControlProps extends IFieldControlProps {
     pattern: string;
     errorMessage: string;
 }
 
-export class PatternControl extends BaseFieldControl<IPatternControlProps, IBaseFieldControlState> {
+export class PatternControl extends FieldControl<IPatternControlProps, IFieldControlState> {
+    private _service: IWorkItemFormService;
 
     public render(): JSX.Element {
         let className = "pattern-control-input";
@@ -52,7 +54,7 @@ export class PatternControl extends BaseFieldControl<IPatternControlProps, IBase
 }
 
 export function init() {
-    let inputs = BaseFieldControl.getInputs<IPatternControlInputs>();
+    let inputs = FieldControl.getInputs<IPatternControlInputs>();
     
     ReactDOM.render(
         <PatternControl 

@@ -12,7 +12,6 @@ module.exports = {
         PlainTextControl: "./scripts/PlainTextControl.tsx",
         SliderControl: "./scripts/SliderControl.tsx",
         RatingControl: "./scripts/RatingControl.tsx",
-        MessagePanel: "./scripts/MessagePanel.tsx",
         Checklist: "./scripts/Checklist.tsx"
     },
     output: {
@@ -32,7 +31,8 @@ module.exports = {
         moduleExtensions: ["-loader"],
         alias: { 
             "OfficeFabric": path.resolve(__dirname, "node_modules/office-ui-fabric-react/lib-amd"),
-            "ReactWidgets": path.resolve(__dirname, "node_modules/react-widgets/lib")
+            "ReactWidgets": path.resolve(__dirname, "node_modules/react-widgets/lib"),
+            "VSTS_Extension": path.resolve(__dirname, "node_modules/vsts-extension-react-widgets/lib-amd")
         }        
     },
     module: {

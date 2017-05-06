@@ -7,8 +7,8 @@ import { Fabric } from "OfficeFabric/Fabric";
 import { Rating } from 'OfficeFabric/components/Rating';
 import { RatingSize } from 'OfficeFabric/components/Rating/Rating.Props';
 
-import {BaseFieldControl, IBaseFieldControlProps, IBaseFieldControlState} from "./BaseFieldControl";
-import {InputError} from "./InputError";
+import {FieldControl, IFieldControlProps, IFieldControlState} from "VSTS_Extension/Components/WorkItemControls/FieldControl";
+import {InputError} from "VSTS_Extension/Components/Common/InputError";
 
 interface IRatingControlInputs {
     FieldName: string;
@@ -16,12 +16,12 @@ interface IRatingControlInputs {
     MaxValue: string;
 }
 
-interface IRatingControlProps extends IBaseFieldControlProps {
+interface IRatingControlProps extends IFieldControlProps {
     minValue: number;
     maxValue: number;
 }
 
-export class RatingControl extends BaseFieldControl<IRatingControlProps, IBaseFieldControlState> {
+export class RatingControl extends FieldControl<IRatingControlProps, IFieldControlState> {
 
     public render(): JSX.Element {
         let className = "rating-control";
@@ -43,7 +43,7 @@ export class RatingControl extends BaseFieldControl<IRatingControlProps, IBaseFi
 }
 
 export function init() {
-    let inputs = BaseFieldControl.getInputs<IRatingControlInputs>();
+    let inputs = FieldControl.getInputs<IRatingControlInputs>();
 
     ReactDOM.render(
         <RatingControl 

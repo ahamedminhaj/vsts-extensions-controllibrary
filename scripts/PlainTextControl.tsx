@@ -5,7 +5,7 @@ import * as ReactDOM from "react-dom";
 
 import {Label} from "OfficeFabric/Label";
 
-import {AutoResizableComponent} from "./AutoResizableComponent";
+import {AutoResizableComponent} from "VSTS_Extension/Components/WorkItemControls/AutoResizableComponent";
 
 interface IPlainTextControlInputs {
     Text: string;

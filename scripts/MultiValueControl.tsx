@@ -5,19 +5,19 @@ import * as ReactDOM from "react-dom";
 
 import * as Multiselect from "ReactWidgets/Multiselect";
 
-import {BaseFieldControl, IBaseFieldControlProps, IBaseFieldControlState} from "./BaseFieldControl";
-import {InputError} from "./InputError";
+import {FieldControl, IFieldControlProps, IFieldControlState} from "VSTS_Extension/Components/WorkItemControls/FieldControl";
+import {InputError} from "VSTS_Extension/Components/Common/InputError";
 
 interface IMultiValueControlInputs {
     FieldName: string;
     Values: string;
 }
 
-interface IMultiValueControlProps extends IBaseFieldControlProps {
+interface IMultiValueControlProps extends IFieldControlProps {
     suggestedValues: string[];
 }
 
-export class MultiValueControl extends BaseFieldControl<IMultiValueControlProps, IBaseFieldControlState> {
+export class MultiValueControl extends FieldControl<IMultiValueControlProps, IFieldControlState> {
     public render(): JSX.Element {
         let className = "multivalue-control-container";
         if (this.state.error) {
@@ -61,7 +61,7 @@ export class MultiValueControl extends BaseFieldControl<IMultiValueControlProps,
 }
 
 export function init() {
-    let inputs = BaseFieldControl.getInputs<IMultiValueControlInputs>();
+    let inputs = FieldControl.getInputs<IMultiValueControlInputs>();
     
     let values = inputs.Values;
     let suggestedValues: string[];

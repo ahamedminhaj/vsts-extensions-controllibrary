@@ -10,17 +10,17 @@ import { TextField } from "OfficeFabric/TextField";
 import { autobind } from "OfficeFabric/Utilities";
 import {Icon} from "OfficeFabric/Icon";
 import {Pivot, PivotItem} from "OfficeFabric/Pivot";
+import { MessageBar, MessageBarType } from 'OfficeFabric/MessageBar';
 
 import * as WitExtensionContracts  from "TFS/WorkItemTracking/ExtensionContracts";
 import { WorkItemFormService, IWorkItemFormService } from "TFS/WorkItemTracking/Services";
 import * as Utils_Array from "VSS/Utils/Array";
 import * as Utils_String from "VSS/Utils/String";
 
-import {AutoResizableComponent} from "./AutoResizableComponent";
-import {ExtensionDataManager} from "./ExtensionDataManager";
-import {Loading} from "./Loading";
-import {MessagePanelComponent, MessageType} from "./MessagePanel";
-import {InputError} from "./InputError";
+import {AutoResizableComponent} from "VSTS_Extension/Components/WorkItemControls/AutoResizableComponent";
+import {ExtensionDataManager} from "VSTS_Extension/Utilities//ExtensionDataManager";
+import {Loading} from "VSTS_Extension/Components/Common/Loading";
+import {InputError} from "VSTS_Extension/Components/Common/InputError";
 
 interface IChecklistProps {
 }
@@ -86,13 +86,17 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
             return <Loading />;
         }
         else if(this.state.isNewWorkItem) {
-            return <MessagePanelComponent message={"You need to save the workitem before working with checklist"} messageType={MessageType.Info} />
+            return <MessageBar messageBarType={MessageBarType.info}>You need to save the workitem before working with checklist.</MessageBar>;
         }
         else {
             let currentModel = this.state.isPersonalView ? this.state.privateDataModel : this.state.sharedDataModel;
 
             return (
                 <Fabric className="fabric-container">
+                    <MessageBar messageBarType={MessageBarType.warning}>
+                        The checklist control would be removed from Control library extension on 20th May. It's been moved to a different extension in itself -
+                        <a target="_blank" href="https://marketplace.visualstudio.com/items?itemName=mohitbagra.workitem-checklist">link</a>.
+                    </MessageBar>
                     <div className="container">
                         <Pivot initialSelectedIndex={this.state.isPersonalView ? 0 : 1} onLinkClick={this._onPivotChange}>
                             <PivotItem linkText="Personal" itemKey="personal" />
@@ -101,16 +105,20 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
                         
                         { 
                             this.state.saveError && 
-                            (<MessagePanelComponent 
-                                message={"The current version of checklist doesn't match the version of checklist in this workitem. Please refresh the workitem to get the latest Checklist data."} 
-                                messageType={MessageType.Error} />)
+                            (
+                                <MessageBar messageBarType={MessageBarType.error}>
+                                    The current version of checklist doesn't match the version of checklist in this workitem. Please refresh the workitem to get the latest Checklist data.
+                                </MessageBar>
+                            )
                         }
 
                         <div className="checklist-items">
                             { 
                                 (currentModel == null || currentModel.items == null || currentModel.items.length == 0)
                                 && 
-                                <MessagePanelComponent message={"No checklist items yet."} messageType={MessageType.Info} />
+                                <MessageBar messageBarType={MessageBarType.info}>
+                                    No checklist items yet.
+                                </MessageBar>
                             }
                             { 
                                 (currentModel != null && currentModel.items != null && currentModel.items.length > 0) 
@@ -120,12 +128,16 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
                             
                         </div>
                         <div className="add-checklist-items">
-                            <Icon className="add-icon" iconName="Add" />
+                            <IconButton className="add-icon" iconProps={{iconName: "Add"}} title="Add item" onClick={this._onAddListItem} />
                             <input
                                 type="text" 
                                 value={this.state.itemText}
                                 onChange={this._onItemTextChange} 
-                                onKeyUp={this._onEnterListItem}
+                                onKeyUp={e => {
+                                    if (e.keyCode === 13) {
+                                        this._onAddListItem();
+                                    }                                    
+                                }}
                                 />                            
                         </div>
                         { this.state.inputError && (<InputError error={this.state.inputError} />) }
@@ -154,8 +166,8 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
     }
 
     @autobind
-    private async _onEnterListItem(e: React.KeyboardEvent<HTMLInputElement>) {
-        if (e.keyCode === 13 && this.state.itemText && this.state.itemText.trim()) {
+    private async _onAddListItem() {
+        if (this.state.itemText && this.state.itemText.trim()) {
             const workItemFormService = await WorkItemFormService.getService();
             const workItemId = await workItemFormService.getId();
             let newModel: IExtensionDataModel;
@@ -195,7 +207,7 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
                         checked={item.checked}
                         onChange={(ev: React.FormEvent<HTMLElement>, isChecked: boolean) => this._onCheckboxChange(item.id, isChecked) } />         
 
-                    <IconButton className="delete-item-button" icon="Delete" title="Delete item" onClick={() => this._onDeleteItem(item.id)} />
+                    <IconButton className="delete-item-button" iconProps={{iconName: "Delete"}} title="Delete item" onClick={() => this._onDeleteItem(item.id)} />
                 </div>
             );
         });
@@ -262,8 +274,8 @@ export class Checklist extends AutoResizableComponent<IChecklistProps, IChecklis
         else {
             const workItemId = await workItemFormService.getId();
             let models: IExtensionDataModel[] = await Promise.all([
-                ExtensionDataManager.readDocument<IExtensionDataModel>("CheckListItems", `${workItemId}`, true),
-                ExtensionDataManager.readDocument<IExtensionDataModel>("CheckListItems", `${workItemId}`, false)
+                ExtensionDataManager.readDocument<IExtensionDataModel>("CheckListItems", `${workItemId}`, null, true),
+                ExtensionDataManager.readDocument<IExtensionDataModel>("CheckListItems", `${workItemId}`, null, false)
             ]);
 
             this.setState({...this.state, privateDataModel: models[0], sharedDataModel: models[1], isLoaded: true, isNewWorkItem: false, error: "", saveError: false, itemText: ""});

@@ -7,14 +7,14 @@ import * as Moment from "moment";
 import * as DateTimePicker from "ReactWidgets/DateTimePicker";
 import * as MomentLocalizer from "ReactWidgets/localizers/moment";
 
-import {BaseFieldControl, IBaseFieldControlProps, IBaseFieldControlState} from "./BaseFieldControl";
-import {InputError} from "./InputError";
+import {FieldControl, IFieldControlProps, IFieldControlState} from "VSTS_Extension/Components/WorkItemControls/FieldControl";
+import {InputError} from "VSTS_Extension/Components/Common/InputError";
 
 interface IDateTimeControlInputs {
     FieldName: string;
 }
 
-export class DateTimeControl extends BaseFieldControl<IBaseFieldControlProps, IBaseFieldControlState> {
+export class DateTimeControl extends FieldControl<IFieldControlProps, IFieldControlState> {
 
     public render(): JSX.Element {
         let className = "datetime-control-container";
@@ -52,7 +52,7 @@ export class DateTimeControl extends BaseFieldControl<IBaseFieldControlProps, IB
 
 export function init() {
     MomentLocalizer(Moment);
-    let inputs = BaseFieldControl.getInputs<IDateTimeControlInputs>();
+    let inputs = FieldControl.getInputs<IDateTimeControlInputs>();
 
     ReactDOM.render(
         <DateTimeControl 

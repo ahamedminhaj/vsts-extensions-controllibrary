@@ -6,8 +6,8 @@ import * as ReactDOM from "react-dom";
 import { Fabric } from "OfficeFabric/Fabric";
 import { Slider } from 'OfficeFabric/components/Slider';
 
-import {BaseFieldControl, IBaseFieldControlProps, IBaseFieldControlState} from "./BaseFieldControl";
-import {InputError} from "./InputError";
+import {FieldControl, IFieldControlProps, IFieldControlState} from "VSTS_Extension/Components/WorkItemControls/FieldControl";
+import {InputError} from "VSTS_Extension/Components/Common/InputError";
 
 interface ISliderControlInputs {
     FieldName: string;
@@ -16,13 +16,13 @@ interface ISliderControlInputs {
     StepSize: string;
 }
 
-interface ISliderControlProps extends IBaseFieldControlProps {
+interface ISliderControlProps extends IFieldControlProps {
     minValue: number;
     maxValue: number;
     stepSize: number;
 }
 
-export class SliderControl extends BaseFieldControl<ISliderControlProps, IBaseFieldControlState> {
+export class SliderControl extends FieldControl<ISliderControlProps, IFieldControlState> {
 
     public render(): JSX.Element {
         let className = "slider-control";
@@ -49,7 +49,7 @@ export class SliderControl extends BaseFieldControl<ISliderControlProps, IBaseFi
 }
 
 export function init() {
-    let inputs = BaseFieldControl.getInputs<ISliderControlInputs>();
+    let inputs = FieldControl.getInputs<ISliderControlInputs>();
     
     ReactDOM.render(
         <SliderControl 
