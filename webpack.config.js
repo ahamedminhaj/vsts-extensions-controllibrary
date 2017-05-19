@@ -11,8 +11,7 @@ module.exports = {
         PatternControl: "./scripts/PatternControl.tsx",
         PlainTextControl: "./scripts/PlainTextControl.tsx",
         SliderControl: "./scripts/SliderControl.tsx",
-        RatingControl: "./scripts/RatingControl.tsx",
-        Checklist: "./scripts/Checklist.tsx"
+        RatingControl: "./scripts/RatingControl.tsx"
     },
     output: {
         filename: "scripts/[name].js",

@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
     "id": "vsts-wit-control-library",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "name": "Work item form control library",
     "description": "A control library extension for VSTS work item form",
     "publisher": "mohitbagra",
@@ -15,10 +15,6 @@
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services.Cloud"
-        },
-        {
-            "id": "Microsoft.TeamFoundation.Server",
-            "version": "[15.1,)"
         }
     ],
     "tags": [
@@ -64,19 +60,7 @@
             "addressable": true
         }
     ],
-    "contributions": [
-        {
-            "id": "work-item-checklist-group-hub",
-            "type": "ms.vss-work-web.work-item-form-group",
-            "description": "Work item checklist extension",
-            "targets": [
-                "ms.vss-work-web.work-item-form"
-            ],
-            "properties": {
-                "name": "Checklist",
-                "uri": "html/checklist.html"
-            }
-        },
+    "contributions": [        
         {
             "id": "plaintext-form-control",
             "type": "ms.vss-work-web.work-item-form-control",
