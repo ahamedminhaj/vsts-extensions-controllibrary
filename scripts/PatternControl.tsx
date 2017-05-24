@@ -22,8 +22,6 @@ interface IPatternControlProps extends IFieldControlProps {
 }
 
 export class PatternControl extends FieldControl<IPatternControlProps, IFieldControlState> {
-    private _service: IWorkItemFormService;
-
     public render(): JSX.Element {
         let className = "pattern-control-input";
         if (this.state.error) {
@@ -44,12 +42,23 @@ export class PatternControl extends FieldControl<IPatternControlProps, IFieldCon
     }    
 
     protected getErrorMessage(value: string): string {
+        let error = "";
         if (value) {
             var patt = new RegExp(this.props.pattern);
-            return patt.test(value) ? "" : this.props.errorMessage;
+            error = patt.test(value) ? "" : this.props.errorMessage;            
         }
+        this._setWorkItemFormError(error);
+        return error;        
+    }
 
-        return "";
+    private async _setWorkItemFormError(error: string) {
+        let service = await WorkItemFormService.getService();
+        if (error) {
+            service.setError(error);
+        }
+        else {
+            service.clearError();
+        }        
     }
 }
 
