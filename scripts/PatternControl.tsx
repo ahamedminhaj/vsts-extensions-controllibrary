@@ -44,15 +44,15 @@ export class PatternControl extends FieldControl<IPatternControlProps, IFieldCon
     protected getErrorMessage(value: string): string {
         let error = "";
         if (value) {
-            var patt = new RegExp(this.props.pattern);
-            error = patt.test(value) ? "" : this.props.errorMessage;            
+            const patt = new RegExp(this.props.pattern);
+            error = patt.test(value) ? "" : this.props.errorMessage;
         }
         this._setWorkItemFormError(error);
-        return error;        
+        return error;
     }
 
     private async _setWorkItemFormError(error: string) {
-        let service = await WorkItemFormService.getService();
+        let service: any = await WorkItemFormService.getService();
         if (error) {
             service.setError(error);
         }
