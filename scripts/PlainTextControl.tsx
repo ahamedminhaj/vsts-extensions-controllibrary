@@ -15,7 +15,7 @@ interface IPlainTextControlProps {
     text: string;
 }
 
-export class PlainTextControl extends AutoResizableComponent<IPlainTextControlProps, void> {
+export class PlainTextControl extends AutoResizableComponent<IPlainTextControlProps, {}> {
 
     public render(): JSX.Element {
         return (
